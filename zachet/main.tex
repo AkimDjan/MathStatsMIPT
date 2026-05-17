@@ -1,0 +1,602 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+
+\title{Шпора МАТСТАТ}
+\author{Аким Тарасов}
+
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathtools}
+
+\date{May 2026}
+
+\begin{document}
+
+\section*{1) ЗАДАЧА НА ОЦЕНКИ (Т3-Т6 из задания)}
+
+Пусть дана случайная величина и выборка
+\[
+\xi \sim \rho(x,\theta), \vec{x}_n, 
+\]
+где \(\theta \in \Theta\) --- неизвестный параметр. Требуется построить оценку параметра, исследовать её свойства, проверить эффективность и построить доверительные интервалы.
+
+\subsection*{1. Построение оценки}
+
+\subsubsection*{1.1. Метод моментов (ОММ)}
+
+\begin{enumerate}
+    \item Выписать теоретические моменты:
+    \[
+    \alpha_k(\theta)=M x^k.
+    \]
+
+    \item Выписать выборочные моменты:
+    \[
+    \widetilde{\alpha}_k=\frac1n\sum_{i=1}^n x_i^k.
+    \]
+
+    \item Приравнять:
+    \[
+    \alpha_k(\theta)=\widetilde{\alpha}_k.
+    \]
+
+    \item Решить полученное уравнение относительно \(\theta\):
+    \[
+    \widetilde{\theta}_{OMM}=g(\widetilde{\alpha}_1,\dots,\widetilde{\alpha}_m).
+    \]
+\end{enumerate}
+
+\subsubsection*{1.2. Метод максимального правдоподобия (ОМП)}
+
+\begin{enumerate}
+    \item Выписать функцию правдоподобия:
+    \[
+    L(\theta)=\prod_{i=1}^n \rho(x_i, \theta).
+    \]
+
+    \item Перейти к логарифмической функции правдоподобия:
+    \[
+    \ell(\theta)=\ln L(\theta,\vec{x}_n).
+    \]
+
+    \item Найти стационарные точки:
+    \[
+    \frac{\partial \ell(\theta)}{\partial \theta}=0.
+    \]
+
+    \item Учесть ограничения на параметр:
+    \[
+    \theta \in \Theta.
+    \]
+
+    Особенно важно проверить:
+    \begin{itemize}
+        \item границы области допустимых значений;
+        \item случаи, когда носитель распределения зависит от параметра.
+    \end{itemize}
+
+    \item Найти
+    \[
+    \widetilde{\theta}_{OMP}
+    =
+    \arg\max_{\theta \in \Theta} L(\theta,X).
+    \]
+\end{enumerate}
+
+\subsection*{2. Исследование оценки на несмещённость}
+
+Оценка называется несмещённой, если
+\[
+M\widetilde{\theta}=\theta.
+\]
+
+\begin{enumerate}
+    \item Вычислить:
+    \[
+    M \widetilde{\theta}.
+    \]
+
+    \item Если
+    \[
+    M \widetilde{\theta}\neq \theta,
+    \]
+    то оценка смещённая.
+
+    \item При необходимости построить исправленную оценку:
+    \[
+    \widetilde{\theta}^{\,*}=a\widetilde{\theta}+b,
+    \]
+    где коэффициенты \(a,b\) выбираются из условия
+    \[
+    M\widetilde{\theta}^{\,*}=\theta.
+    \]
+\end{enumerate}
+
+\subsection*{3. Исследование оценки на состоятельность}
+
+Оценка называется состоятельной, если
+\[
+\widetilde{\theta}\xrightarrow[]{P}\theta,
+\qquad n\to\infty.
+\]
+
+\subsubsection*{3.1. Достаточное условие состоятельности}
+
+Если оценка несмещена, или
+\[
+M\widetilde{\theta}=\theta
+\]
+и
+\[
+D\widetilde{\theta}\to0,
+\qquad n\to\infty,
+\]
+то по неравенству Чебышёва
+\[
+\widetilde{\theta}\xrightarrow[]{P}\theta.
+\]
+
+\subsubsection*{3.2. Проверка по определению}
+
+Если достаточное условие не выполняется, исследовать:
+\[
+P_\theta\left(
+|\widetilde{\theta}-\theta|>\varepsilon
+\right),
+\]
+и показать, что
+\[
+P\left(
+|\widetilde{\theta}-\theta|>\varepsilon
+\right)\to0
+\qquad \forall \varepsilon>0.
+\]
+
+\subsection*{4. Исследование эффективности оценки}
+
+\subsubsection*{4.1. Проверка условий регулярности модели}
+
+Для применения неравенства Крамера--Рао требуется регулярность вероятностной модели:
+
+\begin{enumerate}
+    \item Существует производная
+    \[
+    \frac{\partial}{\partial\theta}
+    \ln \rho(x, \theta).
+    \]
+
+    \item Допустима перестановка производной по параметру и интеграла Стилтьеса:
+    \[
+    \frac{\partial}{\partial\theta}
+    \int
+    \,dF(x,\theta)
+    =
+    \int
+    \,d\!\left(
+    \frac{\partial F(x,\theta)}{\partial\theta}
+    \right).
+    \]
+
+    На практике данное условие обычно проверяется следующим образом:
+    \[
+    \int
+    \frac{\partial}{\partial\theta}
+    p(x, \theta)\,dx
+    +
+    \sum_k
+    \frac{\partial}{\partial\theta}
+    p_k(\theta)
+    =
+    0,
+    \]
+    где:
+    \begin{itemize}
+        \item \(p(x, \theta)\) --- непрерывная часть плотности;
+        \item \(p_k(\theta)\) --- вероятности атомов дискретной части распределения.
+    \end{itemize}
+
+    \item Информация Фишера
+    \[
+    I(\theta)
+    =
+    M[
+    \left(
+    \frac{\partial}{\partial\theta}
+    \ln \rho(x, \theta)
+    \right)^2]
+    \]
+    существует, непрерывна и положительна:
+    \[
+    I(\theta)>0, \forall \theta \in \Theta
+    \]
+\end{enumerate}
+
+\subsubsection*{4.2. Проверка регулярности оценки}
+
+Требуется:
+\begin{itemize}
+    \item несмещённость оценки;
+    \item регулярность модели;
+    \item ограниченность дисперсии на любом компакте из \[\Theta\].
+\end{itemize}
+
+\subsubsection*{4.3. Неравенство Крамера--Рао}
+
+Для любой регулярной несмещённой оценки:
+\[
+D\widetilde{\theta}
+\ge
+\frac1{nI(\theta)}.
+\]
+
+\begin{enumerate}
+    \item Вычислить:
+    \[
+    D \widetilde{\theta}.
+    \]
+
+    \item Вычислить информацию Фишера:
+    \[
+    I(\theta).
+    \]
+
+    \item Сравнить:
+    \[
+    D \widetilde{\theta}
+    \quad \text{и} \quad
+    \frac1{nI(\theta)}.
+    \]
+\end{enumerate}
+
+\subsubsection*{4.4. Вывод}
+
+\begin{itemize}
+    \item Если
+    \[
+    D \widetilde{\theta}
+    =
+    \frac1{nI(\theta)},
+    \]
+    то оценка эффективна.
+
+    \item Если
+    \[
+    D\widetilde{\theta}
+    >
+    \frac1{nI(\theta)},
+    \]
+    то не можем ничего сказать, вспоминаем про Теорему о единственности эффектичной оценки.
+\end{itemize}
+
+\subsection*{5. Построение доверительных интервалов}
+
+\subsubsection*{5.1. Точный доверительный интервал}
+
+Если удаётся построить статистику
+\[
+f(\vec{x}_n, h).
+\]
+распределение которой не зависит от параметра \(\theta\), то используется точный метод.
+
+\begin{enumerate}
+    \item Найти распределение статистики:
+    \[
+    f(\vec{x}_n, h) \sim q(t)
+    \]
+
+    \item Построить вероятностное утверждение:
+    \[
+    P\left(
+    q_{(1-\beta)/2}<f(\vec{x}_n, h)<q_{(1+\beta)/2}
+    \right)=\beta.
+    \]
+
+    \item Разрешить неравенство относительно \(\theta\).
+\end{enumerate}
+
+\subsubsection*{5.2. Асимптотический доверительный интервал для ОММ}
+
+Пусть
+\[
+\widetilde{\theta}_{OMM}
+=
+g(\widetilde{\alpha}_1,\dots,\widetilde{\alpha}_m),
+\]
+где \(g\) дифференцируема и
+\[
+\nabla g(\alpha)\neq0.
+\]
+
+Тогда:
+\[
+\sqrt n
+\left(
+\widetilde{\theta}_{OMM}-\theta
+\right)
+\Rightarrow
+N(0,\sigma^2(\theta)),
+\]
+где
+\[
+\sigma^2(\theta)
+=
+\nabla^T g(\alpha)\,
+K\,
+\nabla g(\alpha),
+\]
+а \(K\) --- ковариационная матрица моментов.
+
+По лемме Слуцкого:
+\[
+\sigma^2(\theta)
+\sim
+\sigma^2(\widetilde{\theta}).
+\]
+
+Следовательно:
+\[
+\frac{
+\sqrt n
+(\widetilde{\theta}_{OMM}-\theta)
+}{
+\sigma(\widetilde{\theta}_{OMM})
+}
+\Rightarrow
+N(0,1).
+\]
+
+Отсюда асимптотический доверительный интервал:
+\[
+\widetilde{\theta}_{OMM}
+\pm
+\frac{
+z_{1-\alpha/2}\,
+\sigma(\widetilde{\theta}_{OMM})
+}{
+\sqrt n
+}.
+\]
+
+\subsubsection*{5.3. Асимптотический доверительный интервал для ОМП}
+
+Если модель сильно регулярна (регулярная, перестановочна вторая производная и F 2-жды непрерывно дифференцируема) и
+\[
+\Theta
+\]
+--- открытое множество, то:
+\[
+\sqrt n
+(\widetilde{\theta}_{OMP}-\theta)
+\Rightarrow
+N\left(
+0,
+I^{-1}(\theta)
+\right).
+\]
+
+Если рассматривается функция параметра:
+\[
+g(\theta),
+\]
+\[
+\sqrt n
+\left(
+g(\widetilde{\theta}_{OMP})-g(\theta)
+\right)
+\Rightarrow
+N\left(
+0,
+\nabla^T g(\theta)\,
+I^{-1}(\theta)\,
+\nabla g(\theta)
+\right).
+\]
+
+После применения леммы Слуцкого:
+\[
+\frac{
+\sqrt n
+(g(\widetilde{\theta}_{OMP})-g(\theta))
+}{
+\sigma(\widetilde{\theta}_{OMP})
+}
+\Rightarrow
+N(0,1).
+\]
+
+Итоговый асимптотический доверительный интервал:
+\[
+g(\widetilde{\theta}_{OMP})
+\pm
+\frac{
+z_{1-\alpha/2}\,
+\sigma(\widetilde{\theta}_{OMP})
+}{
+\sqrt n
+}.
+\]
+
+
+
+
+
+\section*{2) ЗАДАЧА НА НАИБОЛЕЕ МОЩНЫЙ КРИТЕРИЙ (ТЕОРЕМА НЕЙМАНА--ПИРСОНА) (Т11 из задания)}
+
+Пусть дана выборка
+\[
+\vec x_n,
+\]
+и требуется проверить простые гипотезы:
+\[
+H_0 : p_0(x),
+\qquad
+H_1 : p_1(x).
+\]
+
+Требуется построить наиболее мощный критерий уровня значимости \(\alpha\), найти критическую область, ошибку первого рода, ошибку второго рода и мощность критерия.
+
+\subsection*{1. Построение отношения правдоподобия}
+
+Выписать функции правдоподобия:
+\[
+L_0(\vec x_n),
+\qquad
+L_1(\vec x_n).
+\]
+
+Построить отношение правдоподобия:
+\[
+l(\vec x_n)
+=
+\frac{L_1(\vec x_n)}
+{L_0(\vec x_n)}.
+\]
+
+Упростить выражение и исследовать его монотонность.
+
+Обычно удаётся свести критерий к некоторой статистике:
+\[
+\sum X_i,
+\qquad
+\overline X,
+\qquad
+X_{(1)},
+\qquad
+X_{(n)}
+\]
+и т.д.
+
+\subsection*{2. Построение критической области}
+
+По теореме Неймана--Пирсона наиболее мощный критерий имеет критическую область:
+\[
+G
+=
+\{
+\vec x_n :
+l(\vec x_n)>C
+\}.
+\]
+
+После преобразования обычно получается область вида:
+\[
+G
+=
+\{
+T(\vec X_n)>c
+\}
+\]
+или
+\[
+G
+=
+\{
+T(\vec X_n)<c
+\}.
+\]
+
+\subsection*{3. Определение константы из уровня значимости}
+
+Константа \(c\) определяется из условия:
+\[
+P(G|H_0)=\alpha.
+\]
+
+Для вычисления вероятности используются:
+\begin{itemize}
+    \item известные распределения статистик;
+    \item теорема Фишера;
+    \item интегрирование плотности;
+    \item функции распределения.
+\end{itemize}
+
+После нахождения \(c\) критическая область считается полностью построенной.
+
+\subsection*{4. Ошибка первого рода}
+
+Ошибка первого рода:
+\[
+\alpha_1
+=
+P(G|H_0).
+\]
+
+Это вероятность отвергнуть \(H_0\), когда гипотеза \(H_0\) верна.
+
+\subsection*{5. Мощность критерия}
+
+Мощность критерия определяется как:
+\[
+W
+=
+P(G|H_1).
+\]
+
+То есть вероятность попадания в критическую область при справедливости альтернативной гипотезы.
+
+Часто мощность выражается через интеграл:
+\[
+W
+=
+\int_G p_1(x)\,dx.
+\]
+
+\subsection*{6. Ошибка второго рода}
+
+Ошибка второго рода:
+\[
+\alpha_2
+=
+1-W.
+\]
+
+Это вероятность принять \(H_0\), когда верна гипотеза \(H_1\).
+
+\subsection*{7. Состоятельность критерия}
+
+Критерий называется состоятельным, если:
+\[
+\forall H_1 \qquad => \qquad
+W_n\to1,
+\qquad
+n\to\infty.
+\]
+
+Обычно исследуется предел мощности:
+\[
+W_n
+=
+\int_{a_n}^{+\infty} f(x)\,dx
+\]
+или
+\[
+W_n
+=
+\int_{-\infty}^{b_n} f(x)\,dx.
+\]
+
+Если при \(n\to\infty\):
+\[
+a_n\to-\infty
+\]
+или
+\[
+b_n\to+\infty,
+\]
+то интеграл берётся по всей области распределения, следовательно:
+\[
+W_n\to1.
+\]
+
+Тогда:
+\[
+\alpha_{2}^n\to0,
+\]
+и критерий является состоятельным.
+
+\end{document}
